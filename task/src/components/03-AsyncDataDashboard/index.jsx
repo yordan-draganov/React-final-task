@@ -22,7 +22,7 @@ function buildStats(users, posts, comments, elapsed) {
     { label: 'Постове', value: posts.length },
     { label: 'Коментари', value: comments.length },
     { label: 'Средно коментари на пост', value: averageCommentsPerPost },
-    { label: 'Време за зареждане', value: `${elapsed} ms` },
+    { label: 'Време за зареждане', value: `${elapsed} мс` },
   ]
 }
 
@@ -90,7 +90,9 @@ export default function AsyncDataDashboardTask() {
   }
 
   useEffect(() => {
-    loadDashboard()
+    const timeoutId = window.setTimeout(loadDashboard, 0)
+
+    return () => window.clearTimeout(timeoutId)
   }, [])
 
   return (
@@ -103,13 +105,13 @@ export default function AsyncDataDashboardTask() {
 
       {state.loading ? (
         <div className="status-message status-message--success">
-          Зареждане на dashboard данните...
+          Зареждане на данните за таблото...
         </div>
       ) : null}
 
       {state.error ? (
         <div className="status-message status-message--error">
-          Promise.all fallback: {state.error}
+          Резервно зареждане след Promise.all: {state.error}
         </div>
       ) : null}
 
@@ -124,7 +126,7 @@ export default function AsyncDataDashboardTask() {
 
       {state.fallbackMessages.length > 0 ? (
         <section className="panel stack">
-          <h4>Fallback резултати</h4>
+          <h4>Резервни резултати</h4>
           {state.fallbackMessages.map((message) => (
             <p key={message} className="muted">
               {message}

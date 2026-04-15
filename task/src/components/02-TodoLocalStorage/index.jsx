@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'practice-react-todo-list'
 
@@ -29,7 +29,7 @@ export default function TodoLocalStorageTask() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
   }, [todos])
 
-  const visibleTodos = useMemo(() => {
+  const visibleTodos = (() => {
     if (filter === 'active') {
       return todos.filter((todo) => !todo.completed)
     }
@@ -39,7 +39,7 @@ export default function TodoLocalStorageTask() {
     }
 
     return todos
-  }, [filter, todos])
+  })()
 
   const completedCount = todos.filter((todo) => todo.completed).length
 

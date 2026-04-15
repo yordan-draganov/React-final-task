@@ -17,6 +17,22 @@
   --radius-sm: 12px;
 }
 
+body.dark {
+  --app-bg: #111827;
+  --panel-bg: rgba(31, 41, 55, 0.86);
+  --panel-strong: #172033;
+  --panel-border: rgba(226, 232, 240, 0.16);
+  --text-main: #f8fafc;
+  --text-soft: #cbd5e1;
+  --accent: #38bdf8;
+  --accent-strong: #0284c7;
+  --accent-soft: rgba(56, 189, 248, 0.14);
+  --success: #34d399;
+  --danger: #fb7185;
+  --shadow:
+    0 24px 60px rgba(0, 0, 0, 0.28), 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -28,6 +44,12 @@ body {
     radial-gradient(circle at top left, rgba(255, 214, 153, 0.55), transparent 30%),
     linear-gradient(180deg, #f7f1e7 0%, #efe7db 100%);
   color: var(--text-main);
+}
+
+body.dark {
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 30%),
+    linear-gradient(180deg, #0f172a 0%, #111827 100%);
 }
 
 button,
@@ -130,7 +152,7 @@ code {
   padding: 1.5rem;
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--panel-bg);
 }
 
 .panel h3,
@@ -141,13 +163,13 @@ code {
 
 .grid-two {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1rem;
 }
 
 .grid-three {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
 
@@ -190,15 +212,15 @@ code {
 }
 
 .button--secondary {
-  background: #ffffff;
-  color: #111111;
-  border: 1px solid rgba(17, 17, 17, 0.16);
+  background: var(--panel-strong);
+  color: var(--text-main);
+  border: 1px solid var(--panel-border);
 }
 
 .button--ghost {
-  background: #f5f5f5;
-  color: #111111;
-  border: 1px solid rgba(17, 17, 17, 0.12);
+  background: var(--accent-soft);
+  color: var(--text-main);
+  border: 1px solid var(--panel-border);
 }
 
 .button--secondary:hover,
@@ -218,7 +240,7 @@ code {
   padding: 0.8rem 1rem;
   border: 1px solid rgba(110, 70, 18, 0.18);
   border-radius: var(--radius-sm);
-  background: #fff;
+  background: var(--panel-strong);
   color: inherit;
 }
 
@@ -238,7 +260,7 @@ code {
   padding: 1rem;
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-md);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 243, 230, 0.8));
+  background: var(--panel-bg);
 }
 
 .stat-card__label {
@@ -263,7 +285,24 @@ code {
   border-radius: var(--radius-md);
   text-align: center;
   color: var(--text-soft);
-  background: rgba(255, 249, 241, 0.8);
+  background: var(--panel-bg);
+}
+
+.classroom-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.student-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.student-grades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
 }
 
 .status-message {

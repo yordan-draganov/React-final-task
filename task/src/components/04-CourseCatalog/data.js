@@ -41,7 +41,7 @@ export const courses = [
   },
   {
     id: 6,
-    title: 'CI/CD Pipelines',
+    title: 'CI/CD процеси',
     category: 'DevOps',
     level: 'Среден',
     rating: 4.6,
@@ -57,7 +57,7 @@ export const courses = [
   },
   {
     id: 8,
-    title: 'Microservices Architecture',
+    title: 'Архитектура на микросървиси',
     category: 'Backend',
     level: 'Напреднал',
     rating: 4.9,

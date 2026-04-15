@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useReducer, useState } from 'react'
+import { createContext, useContext, useReducer, useState } from 'react'
 
 const TaskContext = createContext(null)
 const FilterContext = createContext(null)
@@ -15,21 +15,21 @@ const initialTasks = {
     },
     {
       id: 2,
-      title: 'Да добавя reducer логика',
+      title: 'Да добавя логика с редюсър',
       priority: 'medium',
       status: 'in-progress',
       createdAt: '13.04.2026, 10:30',
     },
     {
       id: 3,
-      title: 'Да проверя responsive изгледа',
+      title: 'Да проверя адаптивния изглед',
       priority: 'low',
       status: 'done',
       createdAt: '13.04.2026, 11:00',
     },
     {
       id: 4,
-      title: 'Да подготвя demo данни',
+      title: 'Да подготвя демонстрационни данни',
       priority: 'high',
       status: 'todo',
       createdAt: '13.04.2026, 11:10',
@@ -76,10 +76,7 @@ function taskReducer(state, action) {
 
 function TaskProvider({ children }) {
   const [state, dispatch] = useReducer(taskReducer, initialTasks)
-  const value = useMemo(
-    () => ({ tasks: state.tasks, dispatch }),
-    [state.tasks],
-  )
+  const value = { tasks: state.tasks, dispatch }
 
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>
 }
@@ -88,15 +85,12 @@ function FilterProvider({ children }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [priorityFilter, setPriorityFilter] = useState('all')
 
-  const value = useMemo(
-    () => ({
-      searchQuery,
-      priorityFilter,
-      setSearchQuery,
-      setPriorityFilter,
-    }),
-    [priorityFilter, searchQuery],
-  )
+  const value = {
+    searchQuery,
+    priorityFilter,
+    setSearchQuery,
+    setPriorityFilter,
+  }
 
   return <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
 }
@@ -148,7 +142,7 @@ function TaskForm() {
         className="field"
         value={title}
         onChange={(event) => setTitle(event.target.value)}
-        placeholder="Нова задача за kanban board-а"
+        placeholder="Нова задача за канбан дъската"
       />
       <div className="toolbar">
         <select
@@ -156,9 +150,9 @@ function TaskForm() {
           value={priority}
           onChange={(event) => setPriority(event.target.value)}
         >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
+          <option value="low">Нисък</option>
+          <option value="medium">Среден</option>
+          <option value="high">Висок</option>
         </select>
         <button type="submit" className="button">
           Добави
@@ -186,9 +180,9 @@ function FilterBar() {
         onChange={(event) => setPriorityFilter(event.target.value)}
       >
         <option value="all">Всички приоритети</option>
-        <option value="high">High</option>
-        <option value="medium">Medium</option>
-        <option value="low">Low</option>
+        <option value="high">Висок</option>
+        <option value="medium">Среден</option>
+        <option value="low">Нисък</option>
       </select>
     </div>
   )
@@ -196,6 +190,11 @@ function FilterBar() {
 
 function TaskCard({ task }) {
   const { dispatch } = useTaskBoard()
+  const priorityLabels = {
+    low: 'Нисък',
+    medium: 'Среден',
+    high: 'Висок',
+  }
   const priorityTone = {
     low: '#1d7f5f',
     medium: '#d18f1b',
@@ -212,7 +211,7 @@ function TaskCard({ task }) {
             color: priorityTone[task.priority],
           }}
         >
-          {task.priority}
+          {priorityLabels[task.priority]}
         </span>
         <span className="muted">{task.createdAt}</span>
       </div>
@@ -282,7 +281,7 @@ function Dashboard() {
         <p className="stat-card__value">{tasks.length}</p>
       </div>
       <div className="stat-card">
-        <p className="stat-card__label">High priority</p>
+        <p className="stat-card__label">Висок приоритет</p>
         <p className="stat-card__value">{highPriorityCount}</p>
       </div>
       <div className="stat-card">

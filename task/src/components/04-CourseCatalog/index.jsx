@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { courses } from './data'
 
 function SearchBar({ value, onChange }) {
@@ -19,6 +19,12 @@ function FilterPanel({
   onLevelChange,
   onClear,
 }) {
+  const categoryLabels = {
+    Frontend: 'Фронтенд',
+    Backend: 'Бекенд',
+    DevOps: 'DevOps',
+  }
+
   return (
     <div className="toolbar">
       <select
@@ -27,9 +33,9 @@ function FilterPanel({
         onChange={(event) => onCategoryChange(event.target.value)}
       >
         <option value="all">Всички категории</option>
-        <option value="Frontend">Frontend</option>
-        <option value="Backend">Backend</option>
-        <option value="DevOps">DevOps</option>
+        <option value="Frontend">{categoryLabels.Frontend}</option>
+        <option value="Backend">{categoryLabels.Backend}</option>
+        <option value="DevOps">{categoryLabels.DevOps}</option>
       </select>
 
       <select
@@ -72,6 +78,12 @@ function SortControls({ sortBy, onSortChange }) {
 }
 
 function CourseCard({ course }) {
+  const categoryLabels = {
+    Frontend: 'Фронтенд',
+    Backend: 'Бекенд',
+    DevOps: 'DevOps',
+  }
+
   const levelTone = {
     Начинаещ: '#1d7f5f',
     Среден: '#d18f1b',
@@ -87,7 +99,7 @@ function CourseCard({ course }) {
         >
           {course.level}
         </span>
-        <span className="muted">{course.category}</span>
+        <span className="muted">{categoryLabels[course.category]}</span>
       </div>
       <h4>{course.title}</h4>
       <p className="muted">Рейтинг: {course.rating.toFixed(1)} / 5.0</p>
@@ -107,17 +119,13 @@ export default function CourseCatalogTask() {
   const [level, setLevel] = useState('all')
   const [sortBy, setSortBy] = useState('rating')
 
-  const filteredCourses = useMemo(
-    () =>
-      courses
-        .filter((course) =>
-          course.title.toLowerCase().includes(search.trim().toLowerCase()),
-        )
-        .filter((course) => category === 'all' || course.category === category)
-        .filter((course) => level === 'all' || course.level === level)
-        .sort((firstCourse, secondCourse) => secondCourse[sortBy] - firstCourse[sortBy]),
-    [category, level, search, sortBy],
-  )
+  const filteredCourses = courses
+    .filter((course) =>
+      course.title.toLowerCase().includes(search.trim().toLowerCase()),
+    )
+    .filter((course) => category === 'all' || course.category === category)
+    .filter((course) => level === 'all' || course.level === level)
+    .sort((firstCourse, secondCourse) => secondCourse[sortBy] - firstCourse[sortBy])
 
   const averageRating = filteredCourses.length
     ? (

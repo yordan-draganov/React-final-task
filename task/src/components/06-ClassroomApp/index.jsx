@@ -2,7 +2,6 @@ import {
   createContext,
   useContext,
   useEffect,
-  useMemo,
   useReducer,
   useState,
 } from 'react'
@@ -108,7 +107,7 @@ function ClassroomProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
   }, [state])
 
-  const value = useMemo(() => ({ state, dispatch }), [state])
+  const value = { state, dispatch }
 
   return (
     <ClassroomContext.Provider value={value}>{children}</ClassroomContext.Provider>
@@ -182,23 +181,23 @@ function GradeForm() {
   const [subject, setSubject] = useState('Математика')
   const [grade, setGrade] = useState(6)
 
-  useEffect(() => {
-    if (!state.students.some((student) => student.id === Number(studentId))) {
-      setStudentId(state.students[0]?.id ?? '')
-    }
-  }, [state.students, studentId])
+  const selectedStudentId = state.students.some(
+    (student) => student.id === Number(studentId),
+  )
+    ? studentId
+    : state.students[0]?.id ?? ''
 
   function handleSubmit(event) {
     event.preventDefault()
 
-    if (!studentId) {
+    if (!selectedStudentId) {
       return
     }
 
     dispatch({
       type: 'ADD_GRADE',
       payload: {
-        studentId: Number(studentId),
+        studentId: Number(selectedStudentId),
         subject,
         grade: Number(grade),
       },
@@ -209,7 +208,7 @@ function GradeForm() {
     <form className="panel grid-three" onSubmit={handleSubmit}>
       <select
         className="select"
-        value={studentId}
+        value={selectedStudentId}
         onChange={(event) => setStudentId(event.target.value)}
       >
         {state.students.map((student) => (
@@ -283,6 +282,28 @@ function SearchBar() {
   )
 }
 
+function DarkModeToggle() {
+  const [dark, setDark] = useState(false)
+
+  useEffect(() => {
+    document.body.classList.toggle('dark', dark)
+
+    return () => {
+      document.body.classList.remove('dark')
+    }
+  }, [dark])
+
+  return (
+    <button
+      type="button"
+      className="button button--secondary"
+      onClick={() => setDark((currentDark) => !currentDark)}
+    >
+      {dark ? 'Светъл режим' : 'Тъмен режим'}
+    </button>
+  )
+}
+
 function AsyncStatus() {
   const [loading, setLoading] = useState(true)
 
@@ -296,7 +317,7 @@ function AsyncStatus() {
 
   return (
     <div className="stat-card">
-      <p className="stat-card__label">Async статус</p>
+      <p className="stat-card__label">Асинхронен статус</p>
       <p className="stat-card__value">{loading ? 'Зареждане...' : 'Данните са готови'}</p>
     </div>
   )
@@ -376,7 +397,7 @@ function StudentTable() {
       : state.students.filter((student) => student.className === state.classFilter)
 
   return (
-    <div className="stack">
+    <div className="student-list">
       {visibleStudents.length === 0 ? (
         <div className="empty-state">Няма ученици за избрания клас.</div>
       ) : (
@@ -401,7 +422,7 @@ function StudentTable() {
               </button>
             </div>
 
-            <div className="grid-two">
+            <div className="student-grades-grid">
               {Object.entries(student.grades).length === 0 ? (
                 <div className="empty-state">Все още няма въведени оценки.</div>
               ) : (
@@ -424,6 +445,9 @@ function ClassroomContent() {
   return (
     <div className="stack">
       <StatsDashboard />
+      <div className="classroom-actions">
+        <DarkModeToggle />
+      </div>
       <SearchBar />
       <StudentForm />
       <GradeForm />
